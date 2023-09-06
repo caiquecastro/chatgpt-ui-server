@@ -3,7 +3,8 @@ services:
   wsgi-server:
     build:
       context: .
-      target: wsgi-server
+      target: wsgi-server-base
+    command: python manage.py runserver 0.0.0.0:8000
     environment:
       APP_DOMAIN: localhost:9000
       WORKER_TIMEOUT: 180
@@ -14,8 +15,10 @@ services:
       DB_URL: ${DB_URL:-sqlite:///db.sqlite3}
     ports:
       - '8000:8000'
+    volumes:
+      - ./:/app
     networks:
-        - chatgpt-ui_network
+      - chatgpt-ui-network
   web-server:
     build:
       context: .
@@ -26,8 +29,8 @@ services:
     depends_on:
       - wsgi-server
     networks:
-      - chatgpt-ui_network
+      - chatgpt-ui-network
 
 networks:
-  chatgpt-ui_network:
-    driver: bridge
+  chatgpt-ui-network:
+    external: true
