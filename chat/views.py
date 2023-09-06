@@ -282,7 +282,7 @@ def gen_title(request):
         # increment the token count
         increase_token_usage(request.user, openai_response['usage']['total_tokens'], api_key)
     except Exception as e:
-        print(e)
+        logger.error("%s", e)
         title = 'Untitled Conversation'
     # update the conversation title
     conversation_obj.topic = title
