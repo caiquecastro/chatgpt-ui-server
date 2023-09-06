@@ -147,7 +147,7 @@ class EmbeddingDocumentViewSet(viewsets.ModelViewSet):
                 )
 
         my_openai = get_openai(openai_api_key)
-        llm_openai_env(my_openai.api_base, my_openai.api_key)
+        llm_openai_env(my_openai.api_key)
 
         # Get the uploaded file from the request
         file_data = self.request.data.get('file')
@@ -405,7 +405,7 @@ def conversation(request):
             )
 
     my_openai = get_openai(openai_api_key)
-    llm_openai_env(my_openai.api_base, my_openai.api_key)
+    llm_openai_env(my_openai.api_key)
 
     model = get_current_model(model_name, request_max_response_tokens)
     llm_openai_model(model)
@@ -860,7 +860,5 @@ def num_tokens_from_messages(messages, model="gpt-3.5-turbo-0301"):
 
 def get_openai(openai_api_key):
     openai.api_key = openai_api_key
-    proxy = os.getenv('OPENAI_API_PROXY')
-    if proxy:
-        openai.api_base = proxy
+
     return openai

@@ -72,16 +72,23 @@ openai_model = {
 
 _queue = queue.Queue()
 
-def setup_openai_env(api_base=None, api_key=None):
-    if not openai_env['api_base']:
-        openai_env['api_base'] = api_base
+def setup_openai_env(api_key=None):
     if not openai_env['api_key']:
         openai_env['api_key'] = api_key
-    openai.api_base = openai_env['api_base']
-    openai.api_key = openai_env['api_key']
-    openai.api_version = None
-    return (openai_env['api_base'], openai_env['api_key'])
 
+    api_type = os.getenv('OPENAI_API_TYPE')
+    if api_type:
+        openai.api_type = api_type
+
+    api_base = os.getenv('OPENAI_API_BASE')
+    if api_base:
+        openai.api_base = api_base
+
+    openai.api_key = openai_env['api_key']
+    
+    api_version = os.getenv('OPENAI_API_VERSION')
+    if api_version:
+        openai.api_version = api_version
 
 def setup_openai_model(model):
     logger.debug(model)
